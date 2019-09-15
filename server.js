@@ -3,6 +3,7 @@ const http = require('http'),
   url = require('url');
 
 http.createServer((request, response) => {
+  debugger;
   var addr = request.url,
     q = url.parse(addr,true),
     filePath = '';
@@ -10,8 +11,7 @@ http.createServer((request, response) => {
   fs.appendFile('log.txt', 'URL: ' + addr + '\nTimestamp: ' + new Date() + '\n\n', function(err) {
     if (err) {
       console.log(err);
-    }
-      else {
+    } else {
         console.log('Added to log.');
       }
   });
@@ -26,9 +26,11 @@ http.createServer((request, response) => {
     if (err) {
       throw err;
     }
-    response.writeHead(200, {'Content-Type': 'text/plain'});
+
+    response.writeHead(200, {'Content-Type': 'text/html'});
     response.write(data);
     response.end();
+
   });
 
 }).listen(8080);
