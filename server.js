@@ -3,7 +3,6 @@ const http = require('http'),
   url = require('url');
 
 http.createServer((request, response) => {
-  debugger;
   var addr = request.url,
     q = url.parse(addr,true),
     filePath = '';
