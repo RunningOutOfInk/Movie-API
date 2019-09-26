@@ -62,7 +62,7 @@ app.use(function (err, req, res, next) {
 
 //GET Requests
 app.get('/', function(req, res) {
-  var responseText = 'Welcome to my app!'
+  var responseText = 'Welcome to my app about movies!!'
   res.send(responseText);
 });
 app.get('/movies', function(req, res) {
