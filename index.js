@@ -23,9 +23,13 @@ app.use(morgan('common'));
 //User Auth
 //JSON Parsing
 //Static files
-//App Routing -- always last
-
 app.use(express.static('public'));
+//App Routing -- always last
+//Error Handling -- actually last of all middleware
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Uh-oh! Something\'s not right!');
+});
 
 //GET Requests
 app.get('/', function(req, res) {
