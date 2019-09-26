@@ -1,4 +1,6 @@
-const express = require('express');
+const express = require('express'),
+  morgan = require('morgan');
+
 const app = express();
 
 let topBooks = [ {
@@ -14,24 +16,19 @@ let topBooks = [ {
   author: 'Juliet Marillier'
 }]
 
-//Middleware functions
-var myLogger = function (req, res, next) {
-  console.log(req.url);
-  next();
-};
 
-var requestTime = function (req, res, next) {
-  req.requestTime = Date.now();
-  next();
-};
+//Middleware Requests
+//Logging
+app.use(morgan('common'));
+//User Auth
+//JSON Parsing
+//Static files
+//App Routing -- always last
 
 //GET Requests
-app.use(myLogger);
-app.use(requestTime);
 app.get('/', function(req, res) {
   var responseText = 'Welcome to my app!'
-  responseText += '<small> Requested at: ' + req.requestTime + '</small>';
-  res.send(responseText)
+  res.send(responseText);
 });
 app.get('/documentation', function(req, res) {
   res.sendFile('documentation.html', { root : __dirname });
