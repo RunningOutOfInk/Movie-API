@@ -25,13 +25,12 @@ app.use(morgan('common'));
 //Static files
 //App Routing -- always last
 
+app.use(express.static('public'));
+
 //GET Requests
 app.get('/', function(req, res) {
   var responseText = 'Welcome to my app!'
   res.send(responseText);
-});
-app.get('/documentation', function(req, res) {
-  res.sendFile('documentation.html', { root : __dirname });
 });
 app.get('/books', function(req, res) {
   res.json(topBooks)
