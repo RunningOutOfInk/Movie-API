@@ -3,19 +3,48 @@ const express = require('express'),
 
 const app = express();
 
-let topBooks = [ {
-  title: 'Harry Potter and the Sorcerer\'s Stone',
-  author: 'J.K. Rowling'
+let topMovies = [
+{ //1
+  title: 'Stardust',
+  releaseYear: '2007'
 },
-{
-  title: 'Assassin\'s Apprentice',
-  author: 'Robin Hobb'
+{ //2
+  title: 'Penelope',
+  releaseYear: '2006'
 },
-{
-  title: 'Daughter of the Forest',
-  author: 'Juliet Marillier'
-}]
-
+{ //3
+  title: 'V For Vendetta',
+  releaseYear: '2005'
+},
+{ //4
+  title: 'Mona Lisa Smile',
+  releaseYear: '2003'
+},
+{ //5
+  title: 'Spider-Man: Into the Spider-Verse',
+  releaseYear: '2018'
+},
+{ //6
+  title: 'Bolt',
+  releaseYear: '2008'
+},
+{ //7
+  title: 'Scott Pilgrim vs. The World',
+  releaseYear: '2010'
+},
+{ //8
+  title: 'Castle in the Sky',
+  releaseYear: '1986'
+},
+{ //9
+  title: 'Pride and Prejudice',
+  releaseYear: '2005'
+},
+{ //10
+  title: 'The Blind Side',
+  releaseYear: '2009'
+}
+]
 
 //Middleware Requests
 //Logging
@@ -36,8 +65,8 @@ app.get('/', function(req, res) {
   var responseText = 'Welcome to my app!'
   res.send(responseText);
 });
-app.get('/books', function(req, res) {
-  res.json(topBooks)
+app.get('/movies', function(req, res) {
+  res.json(topMovies)
 });
 
 //Listen for requests
