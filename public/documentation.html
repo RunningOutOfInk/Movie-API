@@ -10,4 +10,42 @@
     <h3>Project Brief</h3>
     <p>The web application will provide users with access to information about different movies, directors, and genres. Users will be able to sign up, update their personal information, and create a list of their favorite movies.</p>
   </body>
-</html>  
+</html>
+
+<!--
+Get list of movies                    [GET]    /movies
+  Request body: None
+  Response body: A JSON object holding data about all the movies
+Get data about a single movie by ID   [GET]    /movies/[ID]
+  Request body: None
+  Response body: A JSON object holding data about a single movie, containing ID, name, release year, and rating
+    {
+      id: 1,
+      name: "Castle In The Sky",
+      releaseYear: 1986,
+      rating: 5
+    }
+Get a list of movies by genre         [GET]    /movies/[genre]
+  Request body: None
+  Response body: A JSON object holding data about all the movies
+Add a movie                           [POST]   /movies
+  Request body: A JSON object holding data about the movie to add
+    {
+      name: "Stardust",
+      releaseYear: 2008,
+      rating: 5
+    }
+  Response body: A JSON object holding data about the movie that was added
+    {
+      id: 2,
+      name: "Stardust",
+      releaseYear: 2008,
+      rating: 5
+    }
+Remove a movie by ID                  [DELETE] /movies/[ID]
+  Request body: None
+  Response body: A text message indicating the movie was successfully removed
+Update a movie rating                 [PUT]    /movies[ID]/[rating]
+  Request body: None
+  Response body: A text message indicating the movie rating that was updated
+-->
