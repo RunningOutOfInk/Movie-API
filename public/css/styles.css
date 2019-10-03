@@ -1,0 +1,11 @@
+.page-container {
+  margin-top: 50px;
+}
+
+body {
+  background-color: #ddd;
+  /* font-size: 16px; */
+  font-family: 'Merriweather', serif;
+  /* font-weight: 300; */
+  line-height: 1.5;
+}

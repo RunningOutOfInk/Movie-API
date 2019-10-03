@@ -70,9 +70,9 @@ app.get('/movies', function(req, res) {
 });
 
 //POST Requests
-app.post("/movies", function(req, res) {
-  //Do something here
-});
+// app.post("/movies", function(req, res) {
+//   //Do something here
+// });
 
 //Listen for requests
 app.listen(8080, () =>
