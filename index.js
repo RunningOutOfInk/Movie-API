@@ -60,19 +60,87 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Uh-oh! Something\'s not right!');
 });
 
-//GET Requests
+//Requests
 app.get('/', function(req, res) {
   var responseText = 'Welcome to my app about movies!!'
   res.send(responseText);
 });
+
+//Gets a list of movies
 app.get('/movies', function(req, res) {
   res.json(topMovies)
 });
 
-//POST Requests
-// app.post("/movies", function(req, res) {
-//   //Do something here
-// });
+//Gets the data about a single movie by title
+app.get("/movies/:title", (req, res) => {
+  res.json(topMovies.find( (movie) =>
+    { return movie.title === req.params.title }));
+});
+
+//Gets description of a genre by genre name
+app.get("/genres/:genre", (req, res) => {
+  res.send('Successful GET request returning description of a genre.');
+})
+
+//Gets a list of movies by genre
+app.get("/movies/:genre", (req, res) => {
+  res.send('Successful GET request returning list of movies by genre.');
+})
+
+//Gets data about a director by name
+app.get("/directors/:name", (req, res) => {
+  res.send('Successful GET request returning data about a director.');
+})
+
+//Adds data for a new movie to the list of movies
+app.post("/movies", (req, res) => {
+  let newMovie = req.body;
+
+  if (!newMovie.title) {
+    const message = "Missing title in request body";
+    res.status(400).send(message);
+  } else {
+    newMovie.id = uuid.v4();
+    topMovies.push(newMovie);
+    res.status(201).send(newMovie);
+  }
+});
+
+//Deletes a movie from the list by title
+app.delete("/movies/:title", (req, res) => {
+  let movie = topMovies.find((movie) => { return movie.title === req.params.title });
+
+  if (movie) {
+    topMovies.filter(function(obj) { return obj.title !== req.params.title });
+
+  res.status(201).send("Movie " + req.params.title + " was deleted.")
+  }
+});
+
+//Posts a new user
+app.post("/users", function(req, res) {
+   res.send('Successful POST request adding a new user.');
+});
+
+//Updates user info by username
+app.put("/users/:username", (req, res) => {
+  res.send('Successful PUT request updating info about a user.');
+});
+
+//Adds a movie to a list of user favorites
+app.post("/users/:username/:title" (req, res) => {
+  res.send('Successful POST adding a movie to a list of favorites.');
+});
+
+//Removes a movie from a list of favorites
+app.delete("/users/:username/:title", (req, res) => {
+  res.send('Successful DELETE request removing a movie from a list of favorites.');
+});
+
+//Removes a user
+app.delete("/users/:username", (req, res) => {
+  res.send('Successful DELETE request removing a user.');
+})
 
 //Listen for requests
 app.listen(8080, () =>
