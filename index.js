@@ -1,5 +1,7 @@
 const express = require('express'),
-  morgan = require('morgan');
+  morgan = require('morgan'),
+  bodyParser = require("body-parser"),
+  uuid = require("uuid");
 
 const app = express();
 
@@ -51,6 +53,7 @@ let topMovies = [
 app.use(morgan('common'));
 //User Auth
 //JSON Parsing
+app.use(bodyParser.json());
 //Static files
 app.use(express.static('public'));
 //App Routing -- always last
@@ -83,7 +86,7 @@ app.get("/genres/:genre", (req, res) => {
 })
 
 //Gets a list of movies by genre
-app.get("/movies/:genre", (req, res) => {
+app.get("/movies/genres/:genre", (req, res) => {
   res.send('Successful GET request returning list of movies by genre.');
 })
 
@@ -95,7 +98,6 @@ app.get("/directors/:name", (req, res) => {
 //Adds data for a new movie to the list of movies
 app.post("/movies", (req, res) => {
   let newMovie = req.body;
-
   if (!newMovie.title) {
     const message = "Missing title in request body";
     res.status(400).send(message);
@@ -103,7 +105,7 @@ app.post("/movies", (req, res) => {
     newMovie.id = uuid.v4();
     topMovies.push(newMovie);
     res.status(201).send(newMovie);
-  }
+}
 });
 
 //Deletes a movie from the list by title
