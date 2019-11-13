@@ -145,7 +145,9 @@ app.post('/users', function(req, res) {
   });
 });
 
-//Updates user info by username - Mongoose Update
+//Updates user info by username - Mongoose Update - different syntax from the others
+//If you don't include all the information from the collection in the update statement, it sets those values to null? Will need to change that
+//Also need to check that the updated Username is not duplicated (and probably Email)
 app.put("/users/:Username", function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, { $set :
     {
@@ -165,9 +167,21 @@ app.put("/users/:Username", function(req, res) {
     })
 });
 
-//Adds a movie to a list of user favorites
-app.post("/users/:username/:title", (req, res) => {
-  res.send('Successful POST adding a movie to a list of favorites.');
+//Adds a movie to a list of user favorites - Mongoose - same syntax as Update User Info
+//Needs the MovieID - would need logic to derive the ID from the movie Title
+app.post("/users/:Username/Movies/:MovieID", function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username }, {
+    $push : { FavoriteMovies : req.params.MovieID }
+  },
+  { new : true },
+  function(err, updatedUser) {
+    if(err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    } else {
+      res.json(updatedUser)
+    }
+  })
 });
 
 //Removes a movie from a list of favorites
