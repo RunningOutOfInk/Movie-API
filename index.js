@@ -95,11 +95,31 @@ app.delete("/movies/:title", (req, res) => {
   }
 });
 
-//Posts a new user
-// app.post("/users", function(req, res) {
-//    res.send('Successful POST request adding a new user.');
-// });
+//Gets all users - Mongoose
+app.get('/users', function(req, res) {
+  Users.find()
+  .then(function(users) {
+    res.status(201).json(users)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
+});
 
+//Gets a user by username - Mongoose
+app.get('/users/:Username', function(req, res) {
+  Users.findOne({ Username : req.params.Username})
+  .then(function(user) {
+    res.json(user)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err)
+  });
+});
+
+//Posts a new user - Mongoose
 app.post('/users', function(req, res) {
   Users.findOne({ Username : req.body.Username }) //Query db to see if user already exists
   .then(function(user) {
