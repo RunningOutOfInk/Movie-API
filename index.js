@@ -3,54 +3,13 @@ const express = require('express'),
   bodyParser = require("body-parser"),
   uuid = require("uuid"),
   mongoose = require('mongoose'),
-  Models = require('./models.js');
+  Models = require('./models.js'),
+  Movies = Models.Movie,
+  Users = Models.User;
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true});
 
 const app = express();
-
-let topMovies = [
-{ //1
-  title: 'Stardust',
-  releaseYear: '2007'
-},
-{ //2
-  title: 'Penelope',
-  releaseYear: '2006'
-},
-{ //3
-  title: 'V For Vendetta',
-  releaseYear: '2005'
-},
-{ //4
-  title: 'Mona Lisa Smile',
-  releaseYear: '2003'
-},
-{ //5
-  title: 'Spider-Man: Into the Spider-Verse',
-  releaseYear: '2018'
-},
-{ //6
-  title: 'Bolt',
-  releaseYear: '2008'
-},
-{ //7
-  title: 'Scott Pilgrim vs. The World',
-  releaseYear: '2010'
-},
-{ //8
-  title: 'Castle in the Sky',
-  releaseYear: '1986'
-},
-{ //9
-  title: 'Pride and Prejudice',
-  releaseYear: '2005'
-},
-{ //10
-  title: 'The Blind Side',
-  releaseYear: '2009'
-}
-]
 
 //Middleware Requests
 //Logging
@@ -75,7 +34,9 @@ app.get('/', function(req, res) {
 
 //Gets a list of movies
 app.get('/movies', function(req, res) {
-  res.json(topMovies)
+  //res.json(topMovies)
+  //Mongoose promise Function
+  //Movies.find().then()
 });
 
 //Gets the data about a single movie by title
@@ -91,6 +52,17 @@ app.get("/genres/:genre", (req, res) => {
 
 //Gets a list of movies by genre
 app.get("/movies/genres/:genre", (req, res) => {
+
+  //Mongoose callback function
+  //Movies.find( { "Genre.Name" : "Thriller" }, function(err, movies) {
+    //Logic here
+  //} );
+
+  //Mongoose promise function
+  //Movies.find( { "Genre.Name" : "Thriller" }).then(function(movies) {
+    //Logic here
+  //});
+
   res.send('Successful GET request returning list of movies by genre.');
 })
 
@@ -124,9 +96,35 @@ app.delete("/movies/:title", (req, res) => {
 });
 
 //Posts a new user
-app.post("/users", function(req, res) {
-   res.send('Successful POST request adding a new user.');
+// app.post("/users", function(req, res) {
+//    res.send('Successful POST request adding a new user.');
+// });
+
+app.post('/users', function(req, res) {
+  Users.findOne({ Username : req.body.Username }) //Query db to see if user already exists
+  .then(function(user) {
+    if (user) { //if username already exists
+      return res.status(400).send(req.body.Username + "already exists!");
+    } else { //Username does not exist; create
+      Users
+      .create({
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then(function(user) {res.status(201).json(user) }) //callback; new document 'user' sent back to client with status code
+      .catch(function(error) {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      })
+    }
+  }).catch(function(error) {
+    console.error(error);
+    res.status(500).send("Error: " + error);
+  });
 });
+
 
 //Updates user info by username
 app.put("/users/:username", (req, res) => {
