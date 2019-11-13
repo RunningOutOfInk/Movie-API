@@ -184,15 +184,26 @@ app.post("/users/:Username/Movies/:MovieID", function(req, res) {
   })
 });
 
-//Removes a movie from a list of favorites
+//Removes a movie from a list of favorites - Mongoose Delete
 app.delete("/users/:username/:title", (req, res) => {
   res.send('Successful DELETE request removing a movie from a list of favorites.');
 });
 
 //Removes a user
-app.delete("/users/:username", (req, res) => {
-  res.send('Successful DELETE request removing a user.');
-})
+app.delete("/users/:Username", function(req, res) {
+  Users.findOneAndRemove({ Username : req.params.Username })
+  .then(function(user) {
+    if(!user) {
+      res.status(400).send(req.params.Username + " was not found!");
+    } else {
+      res.status(200).send(req.params.Username + " was deleted!");
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
+});
 
 //Listen for requests
 app.listen(8080, () =>
