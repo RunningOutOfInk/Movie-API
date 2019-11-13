@@ -95,7 +95,7 @@ app.delete("/movies/:title", (req, res) => {
   }
 });
 
-//Gets all users - Mongoose
+//Gets all users - Mongoose .find()
 app.get('/users', function(req, res) {
   Users.find()
   .then(function(users) {
@@ -107,9 +107,9 @@ app.get('/users', function(req, res) {
   });
 });
 
-//Gets a user by username - Mongoose
+//Gets a user by username - Mongoose  .findOne()
 app.get('/users/:Username', function(req, res) {
-  Users.findOne({ Username : req.params.Username})
+  Users.findOne({ Username : req.params.Username })
   .then(function(user) {
     res.json(user)
   })
@@ -119,7 +119,7 @@ app.get('/users/:Username', function(req, res) {
   });
 });
 
-//Posts a new user - Mongoose
+//Posts a new user - Mongoose .create()
 app.post('/users', function(req, res) {
   Users.findOne({ Username : req.body.Username }) //Query db to see if user already exists
   .then(function(user) {
@@ -133,7 +133,7 @@ app.post('/users', function(req, res) {
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
-      .then(function(user) {res.status(201).json(user) }) //callback; new document 'user' sent back to client with status code
+      .then(function(user) {res.status(201).json(user) }) //new document 'user' sent back to client with status code
       .catch(function(error) {
         console.error(error);
         res.status(500).send("Error: " + error);
@@ -145,10 +145,24 @@ app.post('/users', function(req, res) {
   });
 });
 
-
-//Updates user info by username
-app.put("/users/:username", (req, res) => {
-  res.send('Successful PUT request updating info about a user.');
+//Updates user info by username - Mongoose Update
+app.put("/users/:Username", function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username }, { $set :
+    {
+      Username : req.body.Username,
+      Password : req.body.Password,
+      Email : req.body.Email,
+      Birthday : req.body.Birthday
+    }},
+    { new : true }, //Makes sure updated document is returned
+    function(err, updatedUser) {
+      if(err) {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      } else {
+        res.json(updatedUser)
+      }
+    })
 });
 
 //Adds a movie to a list of user favorites
