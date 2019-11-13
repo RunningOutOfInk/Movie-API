@@ -1,7 +1,11 @@
 const express = require('express'),
   morgan = require('morgan'),
   bodyParser = require("body-parser"),
-  uuid = require("uuid");
+  uuid = require("uuid"),
+  mongoose = require('mongoose'),
+  Models = require('./models.js');
+
+mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true});
 
 const app = express();
 
