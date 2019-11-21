@@ -5,7 +5,9 @@ const express = require('express'),
   mongoose = require('mongoose'),
   Models = require('./models.js'),
   Movies = Models.Movie,
-  Users = Models.User;
+  Users = Models.User,
+  Genres = Models.Genre,
+  Directors = Models.Director;
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true});
 
@@ -32,23 +34,34 @@ app.get('/', function(req, res) {
   res.send(responseText);
 });
 
-//Gets a list of movies
+//Gets a list of movies - Mongoose .find()
 app.get('/movies', function(req, res) {
-  //res.json(topMovies)
-  //Mongoose promise Function
-  //Movies.find().then()
+  Movies.find().then(movies => res.json(movies));
 });
 
 //Gets the data about a single movie by title
-app.get("/movies/:title", (req, res) => {
-  res.json(topMovies.find( (movie) =>
-    { return movie.title === req.params.title }));
-});
+app.get("/movies/:Title", function(req, res) {
+  Movies.findOne({ Title : req.params.Title })
+  .then(function(movie) {
+    res.json(movie)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err)
+  });
+  });
 
 //Gets description of a genre by genre name
-app.get("/genres/:genre", (req, res) => {
-  res.send('Successful GET request returning description of a genre.');
-})
+app.get("/genres/:Genre", function(req, res) {
+  Genres.findOne({ Name : req.params.Genre })
+  .then(function(genre) {
+    res.json(genre.Description)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err)
+  });
+});
 
 //Gets a list of movies by genre
 app.get("/movies/genres/:genre", (req, res) => {
@@ -67,32 +80,39 @@ app.get("/movies/genres/:genre", (req, res) => {
 })
 
 //Gets data about a director by name
-app.get("/directors/:name", (req, res) => {
-  res.send('Successful GET request returning data about a director.');
-})
+app.get("/directors/:Name", function(req, res) {
+  Directors.findOne({ Name : req.params.Name })
+  .then(function(director) {
+    res.json(director)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err)
+  });
+});
 
 //Adds data for a new movie to the list of movies
 app.post("/movies", (req, res) => {
-  let newMovie = req.body;
-  if (!newMovie.title) {
-    const message = "Missing title in request body";
-    res.status(400).send(message);
-  } else {
-    newMovie.id = uuid.v4();
-    topMovies.push(newMovie);
-    res.status(201).send(newMovie);
-}
+//   let newMovie = req.body;
+//   if (!newMovie.title) {
+//     const message = "Missing title in request body";
+//     res.status(400).send(message);
+//   } else {
+//     newMovie.id = uuid.v4();
+//     topMovies.push(newMovie);
+//     res.status(201).send(newMovie);
+// }
 });
 
 //Deletes a movie from the list by title
 app.delete("/movies/:title", (req, res) => {
-  let movie = topMovies.find((movie) => { return movie.title === req.params.title });
+  // let movie = topMovies.find((movie) => { return movie.title === req.params.title });
+  //
+  // if (movie) {
+  //   topMovies.filter(function(obj) { return obj.title !== req.params.title });
 
-  if (movie) {
-    topMovies.filter(function(obj) { return obj.title !== req.params.title });
-
-  res.status(201).send("Movie " + req.params.title + " was deleted.")
-  }
+  // res.status(201).send("Movie " + req.params.title + " was deleted.")
+// }
 });
 
 //Gets all users - Mongoose .find()
@@ -185,8 +205,19 @@ app.post("/users/:Username/Movies/:MovieID", function(req, res) {
 });
 
 //Removes a movie from a list of favorites - Mongoose Delete
-app.delete("/users/:username/:title", (req, res) => {
-  res.send('Successful DELETE request removing a movie from a list of favorites.');
+app.delete("/users/:Username/Movies/:MovieID", function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username }, {
+    $pull : { FavoriteMovies : req.params.MovieID }
+  },
+  { new : true },
+  function(err, updatedUser) {
+    if(err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    } else {
+      res.json(updatedUser)
+    }
+  })
 });
 
 //Removes a user
