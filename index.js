@@ -7,7 +7,10 @@ const express = require('express'),
   Movies = Models.Movie,
   Users = Models.User,
   Genres = Models.Genre,
-  Directors = Models.Director;
+  Directors = Models.Director,
+  passport = require('passport');
+
+require('./passport');
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true});
 
@@ -16,9 +19,10 @@ const app = express();
 //Middleware Requests
 //Logging
 app.use(morgan('common'));
-//User Auth
 //JSON Parsing
 app.use(bodyParser.json());
+//User Auth
+var auth = require('./auth')(app);
 //Static files
 app.use(express.static('public'));
 //App Routing -- always last
