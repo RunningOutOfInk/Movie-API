@@ -39,12 +39,18 @@ app.get('/', function(req, res) {
 });
 
 //Gets a list of movies - Mongoose .find()
-app.get('/movies', function(req, res) {
-  Movies.find().then(movies => res.json(movies));
+app.get('/movies', passport.authenticate('jwt', { session: false }), function(req, res) {
+  Movies.find()
+    .then(function(movies) {
+      res.status(201).json(movies);
+  }).catch(function(error) {
+    console.error(error);
+    res.status(500).send("Error: " + error);
+  });
 });
 
 //Gets the data about a single movie by title
-app.get("/movies/:Title", function(req, res) {
+app.get("/movies/:Title", passport.authenticate('jwt', { session: false }), function(req, res) {
   Movies.findOne({ Title : req.params.Title })
   .then(function(movie) {
     res.json(movie)
@@ -56,7 +62,7 @@ app.get("/movies/:Title", function(req, res) {
   });
 
 //Gets description of a genre by genre name
-app.get("/genres/:Genre", function(req, res) {
+app.get("/genres/:Genre", passport.authenticate('jwt', { session: false }), function(req, res) {
   Genres.findOne({ Name : req.params.Genre })
   .then(function(genre) {
     res.json(genre.Description)
@@ -84,7 +90,7 @@ app.get("/movies/genres/:genre", (req, res) => {
 })
 
 //Gets data about a director by name
-app.get("/directors/:Name", function(req, res) {
+app.get("/directors/:Name", passport.authenticate('jwt', { session: false }), function(req, res) {
   Directors.findOne({ Name : req.params.Name })
   .then(function(director) {
     res.json(director)
@@ -120,7 +126,7 @@ app.delete("/movies/:title", (req, res) => {
 });
 
 //Gets all users - Mongoose .find()
-app.get('/users', function(req, res) {
+app.get('/users', passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.find()
   .then(function(users) {
     res.status(201).json(users)
@@ -132,7 +138,7 @@ app.get('/users', function(req, res) {
 });
 
 //Gets a user by username - Mongoose  .findOne()
-app.get('/users/:Username', function(req, res) {
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOne({ Username : req.params.Username })
   .then(function(user) {
     res.json(user)
@@ -172,7 +178,7 @@ app.post('/users', function(req, res) {
 //Updates user info by username - Mongoose Update - different syntax from the others
 //If you don't include all the information from the collection in the update statement, it sets those values to null? Will need to change that
 //Also need to check that the updated Username is not duplicated (and probably Email)
-app.put("/users/:Username", function(req, res) {
+app.put("/users/:Username", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, { $set :
     {
       Username : req.body.Username,
@@ -193,7 +199,7 @@ app.put("/users/:Username", function(req, res) {
 
 //Adds a movie to a list of user favorites - Mongoose - same syntax as Update User Info
 //Needs the MovieID - would need logic to derive the ID from the movie Title
-app.post("/users/:Username/Movies/:MovieID", function(req, res) {
+app.post("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, {
     $push : { FavoriteMovies : req.params.MovieID }
   },
@@ -209,7 +215,7 @@ app.post("/users/:Username/Movies/:MovieID", function(req, res) {
 });
 
 //Removes a movie from a list of favorites - Mongoose Delete
-app.delete("/users/:Username/Movies/:MovieID", function(req, res) {
+app.delete("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, {
     $pull : { FavoriteMovies : req.params.MovieID }
   },
@@ -225,7 +231,7 @@ app.delete("/users/:Username/Movies/:MovieID", function(req, res) {
 });
 
 //Removes a user
-app.delete("/users/:Username", function(req, res) {
+app.delete("/users/:Username", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndRemove({ Username : req.params.Username })
   .then(function(user) {
     if(!user) {
