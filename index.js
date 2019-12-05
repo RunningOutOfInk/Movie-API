@@ -8,13 +8,27 @@ const express = require('express'),
   Users = Models.User,
   Genres = Models.Genre,
   Directors = Models.Director,
-  passport = require('passport');
+  passport = require('passport'),
+  cors = require('cors');
 
 require('./passport');
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true});
 
 const app = express();
+
+var allowedOrigins = ['http://localhost:8080', 'http://erinnienhuis.com'];
+
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var message = 'The CORS policy for this application does not allow access from origin ' + origin;
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  }
+})); //Does this belong in the Middleware requests area, or is it not considered Middleware?
 
 //Middleware Requests
 //Logging
@@ -151,6 +165,7 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), fu
 
 //Posts a new user - Mongoose .create()
 app.post('/users', function(req, res) {
+  var hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username : req.body.Username }) //Query db to see if user already exists
   .then(function(user) {
     if (user) { //if username already exists
@@ -159,7 +174,7 @@ app.post('/users', function(req, res) {
       Users
       .create({
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
