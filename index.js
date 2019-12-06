@@ -9,7 +9,8 @@ const express = require('express'),
   Genres = Models.Genre,
   Directors = Models.Director,
   passport = require('passport'),
-  cors = require('cors');
+  cors = require('cors'),
+  { check, validationResult } = require('express-validator');
 
 require('./passport');
 
@@ -164,7 +165,22 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), fu
 });
 
 //Posts a new user - Mongoose .create()
-app.post('/users', function(req, res) {
+app.post('/users',
+  //Validation logic
+  [
+    check('Username', 'Username cannot have fewer than 5 characters.').isLength({min: 5}),
+    check('Username', 'Username may not contain non alphanumeric characters.').isAlphanumeric(),
+    check('Password', 'Password is required.').not().isEmpty(),
+    check('Email', 'Email must be valid email address.').isEmail()
+  ], (req, res) => {
+    //Check validation object for errors
+    var errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ erros: errors.array() });
+    }
+
+  //API Post logic
   var hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username : req.body.Username }) //Query db to see if user already exists
   .then(function(user) {
