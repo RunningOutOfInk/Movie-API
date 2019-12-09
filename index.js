@@ -278,6 +278,7 @@ app.delete("/users/:Username", passport.authenticate('jwt', { session: false }),
 });
 
 //Listen for requests
-app.listen(8080, () =>
-  console.log('Your app is listening on Port 8080.')
-);
+var port = process.env.PORT || 3000;
+app.listen(port, "0.0.0.0", function () {
+  console.log("Listening on Port 3000.")
+});
