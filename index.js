@@ -24,6 +24,7 @@ const app = express();
 
 var allowedOrigins = ['http://localhost:8080', 'http://erinnienhuis.com'];
 
+//CORS implementation
 app.use(cors({
   origin: function(origin, callback){
     if(!origin) return callback(null, true);
@@ -181,11 +182,12 @@ app.post('/users',
     var errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(422).json({ erros: errors.array() });
+      return res.status(422).json({ errors: errors.array() });
     }
 
   //API Post logic
-  var hashedPassword = Users.hashPassword(req.body.Password);
+  var hashedPassword = Users.hashPassword(req.body.Password); //Hash the password using the HashPassword from bcrypt, enforced by models.js
+
   Users.findOne({ Username : req.body.Username }) //Query db to see if user already exists
   .then(function(user) {
     if (user) { //if username already exists
@@ -194,7 +196,7 @@ app.post('/users',
       Users
       .create({
         Username: req.body.Username,
-        Password: hashedPassword,
+        Password: hashedPassword, //Store the hashed password
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
@@ -213,11 +215,29 @@ app.post('/users',
 //Updates user info by username - Mongoose Update - different syntax from the others
 //If you don't include all the information from the collection in the update statement, it sets those values to null? Will need to change that
 //Also need to check that the updated Username is not duplicated (and probably Email)
-app.put("/users/:Username", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.put("/users/:Username",
+//Validation logic
+[
+  check('Username', 'Username cannot have fewer than 5 characters.').isLength({min: 5}),
+  check('Username', 'Username may not contain non alphanumeric characters.').isAlphanumeric(),
+  check('Password', 'Password is required.').not().isEmpty(),
+  check('Email', 'Email must be valid email address.').isEmail()
+], passport.authenticate('jwt', { session: false }), function(req, res) {
+
+  //Check validation object for errors
+  var errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  //API Post logic
+  var hashedPassword = Users.hashPassword(req.body.Password); //Hash the password using the HashPassword from bcrypt, enforced by models.js
+
   Users.findOneAndUpdate({ Username : req.params.Username }, { $set :
     {
       Username : req.body.Username,
-      Password : req.body.Password,
+      Password : hashedPassword,
       Email : req.body.Email,
       Birthday : req.body.Birthday
     }},
