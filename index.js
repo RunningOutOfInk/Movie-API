@@ -95,6 +95,9 @@ app.get("/genres/:Genre", passport.authenticate('jwt', { session: false }), func
 
 //Gets a list of movies by genre
 app.get("/movies/genres/:genre", (req, res) => {
+  //Search by genre name and return ID
+
+  //Search all movie documents' Genres array for the ID returned above
 
   //Mongoose callback function
   //Movies.find( { "Genre.Name" : "Thriller" }, function(err, movies) {
@@ -215,6 +218,7 @@ app.post('/users',
 //Updates user info by username - Mongoose Update - different syntax from the others
 //If you don't include all the information from the collection in the update statement, it sets those values to null? Will need to change that
 //Also need to check that the updated Username is not duplicated (and probably Email)
+//Need to add an error response for when the query does not find a username to update
 app.put("/users/:Username",
 //Validation logic
 [
@@ -253,7 +257,7 @@ app.put("/users/:Username",
 });
 
 //Adds a movie to a list of user favorites - Mongoose - same syntax as Update User Info
-//Needs the MovieID - would need logic to derive the ID from the movie Title
+//Needs the MovieID - need logic to derive the ID from the movie Title
 app.post("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, {
     $push : { FavoriteMovies : req.params.MovieID }
