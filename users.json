@@ -1,0 +1,6 @@
+{"_id":{"$oid":"5dc21c7cfab46464578f8dc9"},"Username":null,"Password":"test123","Email":null,"Birthday":null,"Favorites":["5dbf55d4c5fd5997aab699d4","5dbf5645c5fd5997aab699d9"]}
+{"_id":{"$oid":"5dc21c7ffab46464578f8dca"},"Username":"Bryan","Password":"pass","Email":"bman0660@gmail.com","Birthday":{"$date":"1988-07-07T00:00:00.000Z"},"Favorites":["5dbf5590c5fd5997aab699d3","5dbf55dbc5fd5997aab699d5"]}
+{"_id":{"$oid":"5dc21c82fab46464578f8dcb"},"Username":"Dan","Password":"pass","Email":"dnlnnhs@gmail.com","Birthday":{"$date":"1960-01-07T00:00:00.000Z"},"Favorites":["5dbf562ec5fd5997aab699d7","5dbf570ac5fd5997aab699dc"]}
+{"_id":{"$oid":"5dc21c84fab46464578f8dcc"},"Username":"Patti","Password":"pass","Email":"pttnnhs@gmail.com","Birthday":{"$date":"1957-11-08T00:00:00.000Z"},"Favorites":["5dbf5645c5fd5997aab699d9"]}
+{"_id":{"$oid":"5dc21c86fab46464578f8dcd"},"Username":"Michelle","Password":"pass","Email":"mchllnnhs@gmail.com","Birthday":{"$date":"1990-06-17T00:00:00.000Z"},"Favorites":["5dbf5590c5fd5997aab699d3"]}
+{"_id":{"$oid":"5de5acfbfa310403e03a2972"},"FavoriteMovies":[],"Username":"ErinMarie","Password":"test","Email":"erin.nienhuis@gmail.com","__v":0}
