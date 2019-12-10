@@ -30,8 +30,10 @@
               <th scope='col'>Business Logic</th>
               <th scope='col'>URL</th>
               <th scope='col'>HTTP Method</th>
+              <th scope='col'>Requires Authentication</th>
               <th scope='col'>Request body</th>
               <th scope='col'>Response body</th>
+              <th scope='col'>Built</th>
             </tr>
           </thead>
           <tbody>
@@ -39,13 +41,16 @@
               <th class='font-weight-light'>Get list of movies</th>
               <th class='font-weight-light'>/movies</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>No</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding data about all the movies</th>
+              <th scope='col'>Yes</th>
           </tr>
           <tr>
               <th class='font-weight-light'>Get data about a single movie by title</th>
               <th class='font-weight-light'>/movies/[title]</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>No</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding data about a single movie, containing ID, name, release year, and rating
                 <pre><code>
@@ -61,25 +66,31 @@
               }
                 </code></pre>
               </th>
+              <th scope='col'>Yes</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Get description about a genre by name</th>
               <th class='font-weight-light'>/genres/[genre]</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>No</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding the description of a genre</th>
+              <th scope='col'>Yes</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Get a list of movies by genre</th>
               <th class='font-weight-light'>/movies/[genre]</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>No</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding data about all the movies in the given genre</th>
+              <th scope='col'>No</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Get data about a director by name</th>
               <th class='font-weight-light'>/directors/[name]</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>No</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding data about the given director
                 <pre><code>
@@ -91,11 +102,13 @@
                   }
                 </code></pre>
               </th>
+              <th scope='col'>Yes</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Add a movie</th>
               <th class='font-weight-light'>/movies</th>
               <th class='font-weight-light'>POST</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>A JSON object holding data about the movie to add
                 <pre><code>
                   {
@@ -123,116 +136,141 @@
                   }
                 </code></pre>
               </th>
+              <th scope='col'>No</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Remove a movie by title</th>
-              <th class='font-weight-light'>/movies/[title]</th>
+              <th class='font-weight-light'>/movies/:Title</th>
               <th class='font-weight-light'>DELETE</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A text message indicating the movie was successfully removed</th>
+              <th scope='col'>No</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Get a list of users</th>
               <th class='font-weight-light'>/users</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding data about all the users in the database.</th>
+              <th scope='col'>Yes</th>
             <tr>
             <tr>
               <th class='font-weight-light'>Get a user by username</th>
               <th class='font-weight-light'>/users/:Username</th>
               <th class='font-weight-light'>GET</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A JSON object holding data about a user in the database.</th>
+              <th scope='col'>Yes</th>
             <tr>
             <tr>
               <th class='font-weight-light'>Add new user</th>
               <th class='font-weight-light'>/users</th>
+              <th scope='col'>No</th>
               <th class='font-weight-light'>POST</th>
               <th class='font-weight-light'>A JSON object holding data about the user to add
                 <pre><code>
                   {
-                    username: "",
-                    password: "",
-                    email: "",
-                    dob: "",
-                    favorites: {
-                      title: "",
-                      title: ""
-                    }
+                    Username: "",
+                    Password: "",
+                    Email: "",
+                    Birthday: ""
                   }
                 </code></pre>
               </th>
               <th class='font-weight-light'>A JSON object holding data about the user that was added
                 <pre><code>
                   {
-                    id: "",
-                    username: "",
-                    password: "",
-                    email: "",
-                    dob: "",
-                    favorites: {
-                      title: "",
-                      title: ""
-                    }
+                    FavoriteMovies: [],
+                    _id: ""
+                    Username: "",
+                    Password: "",
+                    Email: "",
+                    Birthday: ""
                   }
                 </code></pre>
               </th>
+              <th scope='col'>Yes</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Update user info by username</th>
-              <th class='font-weight-light'>/users/[username]</th>
+              <th class='font-weight-light'>/users/:Username</th>
               <th class='font-weight-light'>PUT</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>A JSON object holding data about the user info to update
                 <pre><code>
                   {
-                    username: "",
-                    password: "",
-                    email: "",
-                    dob: "",
-                    favorites: {
-                      title: "",
-                      title: ""
-                    }
+                    Username: "",
+                    Password: "",
+                    Email: "",
+                    Birthday: ""
                   }
                 </code></pre>
               </th>
               <th class='font-weight-light'>A JSON object holding data about the user info that was updated
                 <pre><code>
                   {
-                    id: "",
-                    username: "",
-                    password: "",
-                    email: "",
-                    dob: "",
-                    favorites: {
-                      title: "",
-                      title: ""
-                    }
+                    FavoriteMovies: [],
+                    _id: ""
+                    Username: "",
+                    Password: "",
+                    Email: "",
+                    Birthday: ""
                   }
                 </code></pre>
+                <th scope='col'>Yes</th>
               </th>
             </tr>
             <tr>
               <th class='font-weight-light'>Add a movie to a list of favorites by username</th>
-              <th class='font-weight-light'>/users/[username]/[title]</th>
+              <th class='font-weight-light'>/users/:Username/Movies/[id]</th>
               <th class='font-weight-light'>POST</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A text message that the movie title has been added to favorites</th>
+              <th scope='col'>Yes</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Remove a movie from a list of favorites by username</th>
-              <th class='font-weight-light'>/users/[username]/[title]</th>
+              <th class='font-weight-light'>/users/:Username/Movies/:id</th>
               <th class='font-weight-light'>DELETE</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A text message that the movie title has been removed from favorites</th>
+              <th scope='col'>Yes</th>
             </tr>
             <tr>
               <th class='font-weight-light'>Remove a user</th>
-              <th class='font-weight-light'>/users/[username]</th>
+              <th class='font-weight-light'>/users/:Username</th>
               <th class='font-weight-light'>DELETE</th>
+              <th scope='col'>Yes</th>
               <th class='font-weight-light'>None</th>
               <th class='font-weight-light'>A text message that the user has been deregistered.</th>
+              <th scope='col'>Yes</th>
+            </tr>
+            <tr>
+              <th class='font-weight-light'>Login a user</th>
+              <th class='font-weight-light'>/login?Username=[username]&Password=[password]</th>
+              <th class='font-weight-light'>POST</th>
+              <th scope='col'>Yes</th>
+              <th class='font-weight-light'>None</th>
+              <th class='font-weight-light'>
+              A JSON object holding data about the user that was logged in, including a Auth token used to authenticate other requests, and a hashed password.
+                <pre><code>
+                  user: {
+                    FavoriteMovies: [],
+                    _id: "",
+                    Username: "",
+                    Password: "",
+                    Email: "",
+                  },
+                  token: ""
+                  }
+                </pre></code>
+              </th>
+              <th scope='col'>Yes</th>
             </tr>
           </tbody>
         </table>

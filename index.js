@@ -59,7 +59,7 @@ app.get('/', function(req, res) {
 });
 
 //Gets a list of movies - Mongoose .find()
-app.get('/movies', passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get('/movies', function(req, res) {
   Movies.find()
     .then(function(movies) {
       res.status(201).json(movies);
@@ -70,7 +70,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), function(re
 });
 
 //Gets the data about a single movie by title
-app.get("/movies/:Title", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get("/movies/:Title", function(req, res) {
   Movies.findOne({ Title : req.params.Title })
   .then(function(movie) {
     res.json(movie)
@@ -82,7 +82,7 @@ app.get("/movies/:Title", passport.authenticate('jwt', { session: false }), func
   });
 
 //Gets description of a genre by genre name
-app.get("/genres/:Genre", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get("/genres/:Genre", function(req, res) {
   Genres.findOne({ Name : req.params.Genre })
   .then(function(genre) {
     res.json(genre.Description)
@@ -109,11 +109,11 @@ app.get("/movies/genres/:genre", (req, res) => {
     //Logic here
   //});
 
-  res.send('Successful GET request returning list of movies by genre.');
+  res.send('This function is not yet built.');
 })
 
 //Gets data about a director by name
-app.get("/directors/:Name", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get("/directors/:Name", function(req, res) {
   Directors.findOne({ Name : req.params.Name })
   .then(function(director) {
     res.json(director)
@@ -134,7 +134,8 @@ app.post("/movies", (req, res) => {
 //     newMovie.id = uuid.v4();
 //     topMovies.push(newMovie);
 //     res.status(201).send(newMovie);
-// }
+// }'
+  res.send('This function is not yet built.');
 });
 
 //Deletes a movie from the list by title
@@ -146,8 +147,10 @@ app.delete("/movies/:title", (req, res) => {
 
   // res.status(201).send("Movie " + req.params.title + " was deleted.")
 // }
+  res.send('This function is not yet built.');
 });
 
+//USERS
 //Gets all users - Mongoose .find()
 app.get('/users', passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.find()
@@ -258,6 +261,7 @@ app.put("/users/:Username",
 
 //Adds a movie to a list of user favorites - Mongoose - same syntax as Update User Info
 //Needs the MovieID - need logic to derive the ID from the movie Title
+//Validation to prevent favorites being added to other user's lists?
 app.post("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, {
     $push : { FavoriteMovies : req.params.MovieID }
@@ -274,6 +278,7 @@ app.post("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { sess
 });
 
 //Removes a movie from a list of favorites - Mongoose Delete
+//Validation to prevent favorites being removed from other user's lists?
 app.delete("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, {
     $pull : { FavoriteMovies : req.params.MovieID }
@@ -290,6 +295,7 @@ app.delete("/users/:Username/Movies/:MovieID", passport.authenticate('jwt', { se
 });
 
 //Removes a user
+//Validation to a user from deleting a user other than themself? Does the passport.authenticate do this already? I think it might.
 app.delete("/users/:Username", passport.authenticate('jwt', { session: false }), function(req, res) {
   Users.findOneAndRemove({ Username : req.params.Username })
   .then(function(user) {
