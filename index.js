@@ -18,7 +18,7 @@ require('./passport');
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true});
 
 //MongoDB Atlas connection
-mongoose.connect('mongodb+srv://myFlixDBAdmin:Admin@myflixdb-bfxal.mongodb.net/myFlixDB?retryWrites=true&w=majority/myFlixDB', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://myFlixDBAdmin:Admin@myflixdb-bfxal.mongodb.net/myFlixDB?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 const app = express();
 
