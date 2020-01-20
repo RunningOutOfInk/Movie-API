@@ -22,7 +22,7 @@ mongoose.connect('mongodb+srv://myFlixDBAdmin:Admin@myflixdb-bfxal.mongodb.net/m
 
 const app = express();
 
-var allowedOrigins = ['http://localhost:8080', 'http://erinnienhuis.com'];
+var allowedOrigins = ['http://localhost:8080', 'http://erinnienhuis.com', 'http://localhost:1234'];
 
 //CORS implementation
 app.use(cors({
