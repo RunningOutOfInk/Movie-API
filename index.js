@@ -63,7 +63,7 @@ app.get('/movies', function(req, res) {
   Movies.aggregate([
     { $lookup:
     {
-      from: 'Directors',
+      from: 'directors',
       localField: 'Director',
       foreignField: '_id',
       as: 'moviedirectordetails'
