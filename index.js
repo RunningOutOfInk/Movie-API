@@ -60,7 +60,16 @@ app.get('/', function(req, res) {
 
 //Gets a list of movies - Mongoose .find()
 app.get('/movies', function(req, res) {
-  Movies.find()
+  Movies.aggregate([
+    { $lookup:
+    {
+      from: Directors,
+      localField: 'Director',
+      foreignField: '_id',
+      as: 'moviedirectordetails'
+    }
+  }
+  ])
     .then(function(movies) {
       res.status(201).json(movies);
   }).catch(function(error) {
