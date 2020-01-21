@@ -58,17 +58,25 @@ app.get('/', function(req, res) {
   res.send(responseText);
 });
 
-//Gets a list of movies - Mongoose .find()
+//Gets a list of movies alongside related director and genre information - Mongoose .find()
 app.get('/movies', function(req, res) {
   Movies.aggregate([
     { $lookup:
-    {
-      from: 'directors',
-      localField: 'Director',
-      foreignField: '_id',
-      as: 'moviedirectordetails'
+      {
+        from: 'directors',
+        localField: 'Director',
+        foreignField: '_id',
+        as: 'moviedirectordetails'
+      }
+    },
+    { $lookup:
+      {
+        from: 'genres',
+        localField: 'Genres',
+        foreighField: '_id',
+        as: 'moviegenredetails'
+      }
     }
-  }
   ])
     .then(function(movies) {
       res.status(201).json(movies);
