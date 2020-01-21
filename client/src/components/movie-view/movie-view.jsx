@@ -26,11 +26,11 @@ export class MovieView extends React.Component {
         </div>
         <div className="movie-genre">
           <span className="label">Genres: </span>
-          <span className="value">{movie.moviegenredetails.Name}</span>
+          <span className="value">{movie.moviegenredetails.map(g => g.Name).join(', ')}</span>
         </div>
         <div className="movie-director">
           <span className="label">Director: </span>
-          <span className="value">{movie.moviedirectordetails.Name}</span>
+          <span className="value">{movie.moviedirectordetails.map(d => d.Name).join(', ')}</span>
         </div>
         <button onClick={() => onClick()} className="back-button">Back</button>
       </div>
