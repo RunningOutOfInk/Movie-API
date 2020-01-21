@@ -73,7 +73,7 @@ app.get('/movies', function(req, res) {
       {
         from: 'genres',
         localField: 'Genres',
-        foreighField: '_id',
+        foreignField: '_id',
         as: 'moviegenredetails'
       }
     }
