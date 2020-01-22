@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import Button from 'react-bootstrap/Button';
 
 export class MovieCard extends React.Component {
   render() {
@@ -10,4 +10,3 @@ export class MovieCard extends React.Component {
     );
   }
 }
-
