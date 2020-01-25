@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import PropTypes from 'prop-types';
 
 export class MovieView extends React.Component {
   constructor() {
@@ -38,3 +39,14 @@ export class MovieView extends React.Component {
     );
   }
 }
+
+MovieView.propTypes = {
+  movie: PropTypes.shape({
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string.isRequired,
+    ImagePath: PropTypes.string.isRequired,
+    moviegenredetails: PropTypes.array.isRequired,
+    moviedirectordetails: PropTypes.array.isRequired,
+  }).isRequired,
+  onClick: PropTypes.func.isRequired
+};
