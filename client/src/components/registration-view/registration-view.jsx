@@ -17,12 +17,20 @@ export function RegistrationView(props) {
 
   return (
     <Form>
+      <Form.Group>
+        <Form.Label>Username</Form.Label>
+        <Form.Control type="text" placeholder="Username" value={username} onChange={e => createUsername(e.target.value)} />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Birthday</Form.Label>
+        <Form.Control type="date" placeholder="01/01/1980" value={birthday} onChange={e => createBirthday(e.target.value)} />
+      </Form.Group>
       <Form.Group controlId="formBasicEmail">
-        <Form.Label>Email Address</Form.Label>
+        <Form.Label>Register Email Address</Form.Label>
         <Form.Control type="email" placeholder="Register email address" value={email} onChange={e => createEmail(e.target.value)} />
       </Form.Group>
       <Form.Group controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
+        <Form.Label>Create Password</Form.Label>
         <Form.Control type="password" placeholder="Create Password" value={password} onChange={e => createPassword(e.target.value)} />
       </Form.Group>
       <Form.Group>

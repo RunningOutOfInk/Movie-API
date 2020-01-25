@@ -13,6 +13,13 @@ export function LoginView(props) {
     props.onLoggedIn(username)
   };
 
+  const handleNewUser = (e) => {
+    e.preventDefault();
+    console.log("New User");
+    /* Send a request to the server for authentication */
+    props.onNewUser()
+  };
+
   return (
     <Form>
       <Form.Group controlId="formBasicEmail">
@@ -26,8 +33,8 @@ export function LoginView(props) {
       <Form.Group>
         <Button variant="primary" type="submit" onClick={handleSubmit}>Submit</Button>
         {' '}
-        <Button id='newUserButton' variant="secondary" type="link" onClick={() => this.onNewUser()}>New User?</Button>
+        <Button variant="secondary" type="link" onClick={handleNewUser}>New User?</Button>
       </Form.Group>
-    </Form>
+    </Form >
   );
 }

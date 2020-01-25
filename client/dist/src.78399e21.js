@@ -35740,8 +35740,6 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function LoginView(props) {
-  var _this = this;
-
   var _useState = (0, _react.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
       username = _useState2[0],
@@ -35758,6 +35756,14 @@ function LoginView(props) {
     /* Send a request to the server for authentication */
 
     props.onLoggedIn(username);
+  };
+
+  var handleNewUser = function handleNewUser(e) {
+    e.preventDefault();
+    console.log("New User");
+    /* Send a request to the server for authentication */
+
+    props.onNewUser();
   };
 
   return _react.default.createElement(_Form.default, null, _react.default.createElement(_Form.default.Group, {
@@ -35783,12 +35789,9 @@ function LoginView(props) {
     type: "submit",
     onClick: handleSubmit
   }, "Submit"), ' ', _react.default.createElement(_Button.default, {
-    id: "newUserButton",
     variant: "secondary",
     type: "link",
-    onClick: function onClick() {
-      return _this.onNewUser();
-    }
+    onClick: handleNewUser
   }, "New User?")));
 }
 },{"react":"../node_modules/react/index.js","react-bootstrap/Form":"../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js"}],"../node_modules/react-bootstrap/esm/divWithClassName.js":[function(require,module,exports) {
@@ -36256,9 +36259,23 @@ function RegistrationView(props) {
     props.onLoggedIn(username);
   };
 
-  return _react.default.createElement(_Form.default, null, _react.default.createElement(_Form.default.Group, {
+  return _react.default.createElement(_Form.default, null, _react.default.createElement(_Form.default.Group, null, _react.default.createElement(_Form.default.Label, null, "Username"), _react.default.createElement(_Form.default.Control, {
+    type: "text",
+    placeholder: "Username",
+    value: username,
+    onChange: function onChange(e) {
+      return createUsername(e.target.value);
+    }
+  })), _react.default.createElement(_Form.default.Group, null, _react.default.createElement(_Form.default.Label, null, "Birthday"), _react.default.createElement(_Form.default.Control, {
+    type: "date",
+    placeholder: "01/01/1980",
+    value: birthday,
+    onChange: function onChange(e) {
+      return createBirthday(e.target.value);
+    }
+  })), _react.default.createElement(_Form.default.Group, {
     controlId: "formBasicEmail"
-  }, _react.default.createElement(_Form.default.Label, null, "Email Address"), _react.default.createElement(_Form.default.Control, {
+  }, _react.default.createElement(_Form.default.Label, null, "Register Email Address"), _react.default.createElement(_Form.default.Control, {
     type: "email",
     placeholder: "Register email address",
     value: email,
@@ -36267,7 +36284,7 @@ function RegistrationView(props) {
     }
   })), _react.default.createElement(_Form.default.Group, {
     controlId: "formBasicPassword"
-  }, _react.default.createElement(_Form.default.Label, null, "Password"), _react.default.createElement(_Form.default.Control, {
+  }, _react.default.createElement(_Form.default.Label, null, "Create Password"), _react.default.createElement(_Form.default.Control, {
     type: "password",
     placeholder: "Create Password",
     value: password,
@@ -36326,12 +36343,12 @@ function (_React$Component) {
   _inherits(MainView, _React$Component);
 
   // One of the "hooks" available in a React Component
-  function MainView() {
+  function MainView(props) {
     var _this;
 
     _classCallCheck(this, MainView);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(MainView).call(this));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(MainView).call(this, props));
     _this.state = {
       movies: null,
       selectedMovie: null,
@@ -36354,21 +36371,24 @@ function (_React$Component) {
       }).catch(function (error) {
         console.log(error);
       });
-    }
+    } //onClick event will set selectedMovie variable to a movie if a movie is passed into the function called by onClick
+
   }, {
     key: "onMovieClick",
     value: function onMovieClick(movie) {
       this.setState({
         selectedMovie: movie
       });
-    }
+    } //onLoggedIn event will set the state to the user variable
+
   }, {
     key: "onLoggedIn",
     value: function onLoggedIn(user) {
       this.setState({
         user: user
       });
-    }
+    } //onNewUser event will set the state to the register variable
+
   }, {
     key: "onNewUser",
     value: function onNewUser() {
@@ -36387,24 +36407,28 @@ function (_React$Component) {
           movies = _this$state.movies,
           selectedMovie = _this$state.selectedMovie,
           user = _this$state.user,
-          register = _this$state.register;
-      if (!user) return _react.default.createElement(_loginView.LoginView, {
+          register = _this$state.register; //When user is null, display LoginView; else, move on
+      //Pass props to LoginView so that LoginView component can update the Main-View state to either Logged In or New User
+
+      if (!user && !register) return _react.default.createElement(_loginView.LoginView, {
+        onLoggedIn: function onLoggedIn(user) {
+          return _this3.onLoggedIn(user);
+        },
+        onNewUser: function onNewUser() {
+          return _this3.onNewUser();
+        }
+      }); // When Register is set, then display Registration view
+
+      if (register && !user) return _react.default.createElement(_registrationView.RegistrationView, {
         onLoggedIn: function onLoggedIn(user) {
           return _this3.onLoggedIn(user);
         }
-      }); //When user is null, display LoginView
-
-      if (register) return _react.default.createElement(_registrationView.RegistrationView, {
-        onNewUser: function onNewUser(register) {
-          return _this3.onNewUser(register);
-        }
-      }); // No idea if this will work, I'm really not sure what I'm doing.When Register is not set, then display Registration view
-      // Before the movies have been loaded
+      }); // Before the movies have been loaded
 
       if (!movies) return _react.default.createElement("div", {
         className: "main-view"
       });
-      return _react.default.createElement("div", {
+      if (user) return _react.default.createElement("div", {
         className: "main-view"
       }, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
         movie: selectedMovie,
